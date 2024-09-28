@@ -28,7 +28,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 Route::put('/user/{id}', [AuthController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/user/{id}', [AuthController::class, 'delete'])->middleware('auth:sanctum');
-Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/home', [PageController::class, 'home'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/reservation', [NavetteController::class, 'indexReservations'])->name('navettes.reservations'); // New route for reservations
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
