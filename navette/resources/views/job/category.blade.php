@@ -59,14 +59,14 @@
             <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
             
             <!-- Réservation -->
-            <a href="{{ route('reservation') }}" class="nav-item nav-link">Réservation</a>
+            <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link">Réservation</a>
             
             <!-- Agences Dropdown -->
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Agences</a>
                 <div class="dropdown-menu rounded-0 m-0">
                     <a href="{{ route('create_navette') }}" class="dropdown-item">Créer navette</a>
-                    <a href="{{ route('manage_navette') }}" class="dropdown-item">Gérer navette</a>
+                    <a href="{{ route('navettes.index') }}" class="dropdown-item">Gérer navette</a>
                     <a href="{{ route('404') }}" class="dropdown-item">404</a>
                 </div>
             </div>
@@ -105,48 +105,51 @@
         
                         <div class="">
                             <h4 class="mb-4">Créer nouvelle navette</h4>
-                            <form id="shuttle-form">
-                                <div class="row g-3">
-                                    <div class="col-12 col-sm-6">
-                                        <input type="text" id="destination" class="form-control" placeholder="Destination">
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="text" id="departure" class="form-control" placeholder="Lieu de départ">
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="text" id="arrival" class="form-control" placeholder="Lieu d'arrivée">
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="text" id="vehicle-type" class="form-control" placeholder="Type de véhicule">
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <select id="brand" class="form-control">
-                                            <option value="">Marque</option>
-                                            <option value="100">Marque 1</option>
-                                            <option value="150">Marque 2</option>
-                                            <option value="200">Marque 3</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="number" id="price-per-person" class="form-control" placeholder="Prix par personne">
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="number" id="vehicle-price" class="form-control" placeholder="Prix de type de véhicule">
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="number" id="brand-price" class="form-control" placeholder="Prix de la marque">
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-danger w-100" onclick="calculateTotalPrice()">Calculer tarif</button>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-primary w-100" type="submit">Payer</button>
-                                    </div>
-                                    <div class="col-12">
-                                        <p id="total-price" class="text-center mt-4"></p>
-                                    </div>
-                                </div>
-                            </form>
+                            <form id="shuttle-form" action="{{ route('creetenav') }}" method="POST">
+    @csrf
+
+    <div class="row g-3">
+        <div class="col-12 col-sm-6">
+            <input type="text" id="destination" name="destination" class="form-control" placeholder="Destination" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <input type="text" id="departure" name="departure" class="form-control" placeholder="Lieu de départ" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <input type="text" id="arrival" name="arrival" class="form-control" placeholder="Lieu d'arrivée" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <input type="text" id="vehicle-type" name="vehicle_type" class="form-control" placeholder="Type de véhicule" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <select id="brand" name="brand" class="form-control" required>
+                <option value="">Marque</option>
+                <option value="100">Marque 1</option>
+                <option value="150">Marque 2</option>
+                <option value="200">Marque 3</option>
+            </select>
+        </div>
+        <div class="col-12 col-sm-6">
+            <input type="number" id="price-per-person" name="price_per_person" class="form-control" placeholder="Prix par personne" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <input type="number" id="vehicle-price" name="vehicle_price" class="form-control" placeholder="Prix de type de véhicule" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <input type="number" id="brand-price" name="brand_price" class="form-control" placeholder="Prix de la marque" required>
+        </div>
+        <div class="col-12">
+            <button type="button" class="btn btn-danger w-100" onclick="calculateTotalPrice()">Calculer tarif</button>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary w-100" type="submit">create</button>
+        </div>
+        <div class="col-12">
+            <p id="total-price" class="text-center mt-4"></p>
+        </div>
+    </div>
+</form>
+
                         </div>
                         
                         <script>
@@ -250,6 +253,40 @@
         </div>
         <!-- Footer End -->
 
+        <script>
+async function calculateTotalPrice() {
+    const destination = document.getElementById('destination').value;
+    const departure = document.getElementById('departure').value;
+    const arrival = document.getElementById('arrival').value;
+    const vehicleType = document.getElementById('vehicle-type').value;
+    const brand = document.getElementById('brand').value;
+    const pricePerPerson = parseFloat(document.getElementById('price-per-person').value) || 0;
+    const vehiclePrice = parseFloat(document.getElementById('vehicle-price').value) || 0;
+    const brandPrice = parseFloat(document.getElementById('brand-price').value) || 0;
+
+    const data = {
+        destination,
+        departure,
+        arrival,
+        vehicle_type: vehicleType,
+        brand,
+        price_per_person: pricePerPerson,
+        vehicle_price: vehiclePrice,
+        brand_price: brandPrice
+    };
+    console.log(data);
+    const response = await fetch('/create/navette', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    document.getElementById('total-price').textContent = `Tarif total: ${result.total_price.toFixed(2)} €`;
+}
+</script>
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>

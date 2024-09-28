@@ -36,4 +36,13 @@ class PageController extends Controller
     {
         return view('job.404');
     }
+
+    public function category()
+    {
+        return view('job.category');
+    }
+    public function testimonial()
+    {
+        return view('job.testimonial');
+    }
 }

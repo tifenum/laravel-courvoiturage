@@ -59,14 +59,14 @@
             <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
             
             <!-- Réservation -->
-            <a href="{{ route('reservation') }}" class="nav-item nav-link">Réservation</a>
+            <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link">Réservation</a>
             
             <!-- Agences Dropdown -->
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Agences</a>
                 <div class="dropdown-menu rounded-0 m-0">
                     <a href="{{ route('create_navette') }}" class="dropdown-item">Créer navette</a>
-                    <a href="{{ route('manage_navette') }}" class="dropdown-item">Gérer navette</a>
+                    <a href="{{ route('navettes.index') }}" class="dropdown-item">Gérer navette</a>
                     <a href="{{ route('404') }}" class="dropdown-item">404</a>
                 </div>
             </div>

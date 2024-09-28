@@ -44,36 +44,48 @@
 
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-            <a href="index.html" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-                <h1 class="m-0 text-primary">Navette</h1>
-            </a>
-            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="index.html" class="nav-item nav-link">Accueil</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
-                    <div class="nav-item dropdown">
-                        <a href="job-list.html" class="nav-item nav-link">Réservation</a>
-                        
-                            
-                           
-                        
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="category.html" class="dropdown-item">Crér navette</a>
-                            <a href="testimonial.html" class="dropdown-item">Gérer navette</a>
-                            <a href="404.html" class="dropdown-item">404</a>
-                        </div>
-                    </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+    <a href="{{ route('home') }}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+        <h1 class="m-0 text-primary">Navette</h1>
+    </a>
+    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto p-4 p-lg-0">
+            <!-- Accueil/Home -->
+            <a href="{{ route('home') }}" class="nav-item nav-link active">Accueil</a>
+            
+            <!-- About -->
+            <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
+            
+            <!-- Réservation -->
+            <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link">Réservation</a>
+            
+            <!-- Agences Dropdown -->
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Agences</a>
+                <div class="dropdown-menu rounded-0 m-0">
+                    <a href="{{ route('create_navette') }}" class="dropdown-item">Créer navette</a>
+                    <a href="{{ route('navettes.index') }}" class="dropdown-item">Gérer navette</a>
+                    <a href="{{ route('404') }}" class="dropdown-item">404</a>
                 </div>
-                <a href="auth/auth.html" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Log Out<i class="fa fa-arrow-right ms-3"></i></a>
             </div>
-        </nav>
+            
+            <!-- Contact -->
+            <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
+        </div>
+
+        <!-- Logout -->
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+
+        <a href="#" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block" 
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+           Log Out<i class="fa fa-arrow-right ms-3"></i>
+        </a>
+    </div>
+</nav>
         <!-- Navbar End -->
 
 
@@ -84,11 +96,43 @@
 
         <!-- Jobs Start -->
         <div class="container-xxl py-5">
-            <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Navettes proposer par X</h1>
-                <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-                   
-                    <div class="tab-content">
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Navettes proposer par X</h1>
+        <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                @foreach($navettes as $navette)
+                    <div class="job-item p-4 mb-4">
+                        <div class="row g-4">
+                            <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                                <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
+                                <div class="text-start ps-4">
+                                    <h5 class="mb-3">{{ $navette->destination }}</h5>
+                                    <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}</span>
+                                    <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}</span>
+                                    <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                <div class="d-flex mb-3">
+                                    <a class="btn btn-primary" href="{{ route('edit_navette', $navette->id) }}">Modifier</a>
+                                    <form action="{{ route('delete_navette', $navette->id) }}" method="POST" style="margin-left: 1rem;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                                    </form>
+                                </div>
+                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{ $navette->date_line }}</small>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                    <!-- <div class="tab-content">
                         <div id="tab-1" class="tab-pane fade show p-0 active">
                             <div class="job-item p-4 mb-4">
                                 <div class="row g-4">
@@ -191,9 +235,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a> -->
-                        </div>
-                        <div id="tab-2" class="tab-pane fade show p-0">
+                        </div> -->
+                        <!-- <div id="tab-2" class="tab-pane fade show p-0">
                             <div class="job-item p-4 mb-4">
                                 <div class="row g-4">
                                     <div class="col-sm-12 col-md-8 d-flex align-items-center">
@@ -398,7 +441,7 @@
                                 </div>
                             </div>
                             <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
