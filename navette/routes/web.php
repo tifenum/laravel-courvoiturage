@@ -48,6 +48,5 @@ Route::get('/navettes/{id}/edit', [NavetteController::class, 'edit'])->name('edi
 // Delete route
 Route::delete('/navettes/{id}', [NavetteController::class, 'destroy'])->name('delete_navette');
 
-Route::get('/navettes/reservations', [NavetteController::class, 'indexReservations'])->name('navettes.reservations'); // New route for reservations
 
 
