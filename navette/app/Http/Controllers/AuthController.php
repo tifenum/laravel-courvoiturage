@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Session;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -38,26 +40,59 @@ class AuthController extends Controller
     }
 
     // Login a user
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->only('email', 'password');
+
+    //     if (!Auth::attempt($credentials)) {
+    //         return response()->json(['message' => 'Unauthorized'], 401);
+    //     }
+
+    //     $user = Auth::user();
+    //     $token = $user->createToken('authToken')->plainTextToken;
+
+    //     return view('job.index');
+    // }
+
     public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string',
+    ]);
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
+    $email    = $request->email;
+    $password = $request->password;
 
-        $user = Auth::user();
-        $token = $user->createToken('authToken')->plainTextToken;
 
-        return view('job.index');
-    }
+    // Attempt to authenticate the user
+    $user = User::where('email', $email)->first();
 
+    if ($user && Auth::attempt(['email' => $email, 'password' => $password])) {
+        // Log the successful login
+        return redirect()->intended('home');
+    } else {
+        // Authentication failed
+        return redirect('login');
+}
+}
     // Logout a user
-    public function logout(Request $request)
+    public function logout1(Request $request)
     {
         $request->user()->tokens()->delete();
         return view('job.auth.auth');
     }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+    
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    
+        return redirect('/login');  // Make sure this redirects to the GET login route
+    }
+    
 
     // Update user details
     public function update(Request $request, $id)
