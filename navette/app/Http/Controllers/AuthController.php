@@ -10,16 +10,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
     // Register a new user
     public function register(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'contactdetails' => 'required|string',
-            'authorization' => 'required|string',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -31,14 +32,42 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'contactdetails' => $request->contactdetails,
-            'authorization' => $request->authorization,
             'email' => $request->email,
+            'role' => 'USER', // Assigning 'USER' as the default role
             'password' => Hash::make($request->password),
         ]);
 
         return view('job.auth.auth');
     }
+    public function registerAgence(Request $request)
+    {
+        // Validate the input data
+        Log::info('Register Agence Request Data:', $request->all());
 
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|string|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+    
+        // Handle validation failure
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+    
+        // Create a new user with the role of AGENCE and store the 'lieu' field
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'place' => $request->lieu, // Using 'lieu' as the contact detail
+            'role' => 'AGENCE', // Set the role as 'AGENCE'
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Redirect to the appropriate view (or handle registration logic)
+        return view('job.auth.auth');
+    }
+    
     // Login a user
     // public function login(Request $request)
     // {
@@ -73,7 +102,7 @@ class AuthController extends Controller
         return redirect()->intended('home');
     } else {
         // Authentication failed
-        return redirect('login');
+        return redirect('/');
 }
 }
     // Logout a user
@@ -90,7 +119,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
     
-        return redirect('/login');  // Make sure this redirects to the GET login route
+        return redirect('/');  // Make sure this redirects to the GET login route
     }
     
 
@@ -99,7 +128,7 @@ class AuthController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $user->update($request->only('name', 'contactdetails', 'authorization'));
+        $user->update($request->only('name', 'contactdetails'));
 
         return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
     }

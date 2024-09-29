@@ -15,16 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('contactdetails');  // String field for contact details
+            $table->string('contactdetails')->nullable();;  // String field for contact details
             $table->string('password');
-            $table->string('authorization');  // String field for authorization
+            $table->string('role')->nullable();
+            $table->string('place')->nullable();  // Nullable: Only relevant for 'agence'
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();  // Optional: For soft delete functionality
-
         });
     }
+
     /**
      * Reverse the migrations.
      */

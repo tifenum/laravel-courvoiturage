@@ -19,7 +19,7 @@ use App\Http\Controllers\NavetteController;
 
 // Route for the login form (accessible without authentication)
 // Route for showing the login form
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('job.auth.auth');  // Assuming this is the login form view
 })->name('login');
 
@@ -30,6 +30,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 // routes/api.php
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/registerAgence', [AuthController::class, 'registerAgence'])->name('registerAgence');
+
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 
 // Protected routes that require authentication
