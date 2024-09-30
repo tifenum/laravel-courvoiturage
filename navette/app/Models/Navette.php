@@ -19,5 +19,7 @@ class Navette extends Model
         'price_per_person',
         'vehicle_price',
         'brand_price',
+        'creator',
+        'accepted',
     ];
 }
