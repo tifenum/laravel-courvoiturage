@@ -62,14 +62,12 @@
             
             <!-- Links for AGENCE role -->
             @if(Auth::check() && Auth::user()->role === 'AGENCE')
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Agences</a>
-                    <div class="dropdown-menu rounded-0 m-0">
-                        <a href="{{ route('create_navette') }}" class="dropdown-item">Créer navette</a>
-                        <a href="{{ route('navettes.index') }}" class="dropdown-item">Gérer navette</a>
-                        <a href="{{ route('404') }}" class="dropdown-item">404</a>
-                    </div>
-                </div>
+                
+                <a href="{{ route('profile') }}"class="nav-item nav-link ">Profile</a>
+                <a href="{{ route('create_navette') }}"class="nav-item nav-link ">Créer navette</a>
+                <a href="{{ route('navettes.index') }}"class="nav-item nav-link ">Gérer navette</a>
+                    
+                
             @endif
              <!-- Links for ADMIN role -->
              @if(Auth::check() && Auth::user()->role === 'ADMIN')

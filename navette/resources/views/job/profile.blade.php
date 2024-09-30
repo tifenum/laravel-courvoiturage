@@ -61,14 +61,12 @@
             
             <!-- Links for AGENCE role -->
             @if(Auth::check() && Auth::user()->role === 'AGENCE')
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Agences</a>
-                    <div class="dropdown-menu rounded-0 m-0">
-                        <a href="{{ route('create_navette') }}" class="dropdown-item">Créer navette</a>
-                        <a href="{{ route('navettes.index') }}" class="dropdown-item">Gérer navette</a>
-                        <a href="{{ route('404') }}" class="dropdown-item">404</a>
-                    </div>
-                </div>
+                
+                <a href="{{ route('profile') }}"class="nav-item nav-link ">Profile</a>
+                <a href="{{ route('create_navette') }}"class="nav-item nav-link ">Créer navette</a>
+                <a href="{{ route('navettes.index') }}"class="nav-item nav-link ">Gérer navette</a>
+                    
+                
             @endif
         </div>
 
@@ -107,6 +105,7 @@
                                     <span>Email: {{ $user->email }}</span>
                                 </div>
                             </div>
+                            @if(Auth::check() && Auth::user()->role !== 'AGENCE')
                             <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
@@ -115,14 +114,17 @@
                                     <span>Contact: {{ $user->contactdetails }}</span>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+                            @endif
+                            @if(Auth::check() && Auth::user()->role === 'AGENCE')
+                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
                                         <i class="fa fa-map-marker-alt text-primary"></i>
                                     </div>
                                     <span>Place: {{ $user->place }}</span>
                                 </div>
-                            </div> -->
+                            </div>
+                            @endif
                             <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
@@ -138,7 +140,9 @@
         </div>
         <!-- Profile End -->
          <!-- Create agence -->
-         <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+
+ @if(Auth::check() && Auth::user()->role === 'ADMIN')
+<div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
     <div class="d-flex align-items-center bg-light rounded p-4">
         <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
         <i class="fa fa-user text-primary"></i>
@@ -243,7 +247,7 @@
         </div>
     </div>
 </div>
-
+@endif
 </div>
 
 
