@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/navettes', [NavetteController::class, 'index'])->name('navettes.index');
     Route::get('/navettes/{id}/edit', [NavetteController::class, 'edit'])->name('edit_navette');
     Route::delete('/navettes/{id}', [NavetteController::class, 'destroy'])->name('delete_navette');
+    Route::put('/navette/{id}', [NavetteController::class, 'update'])->name('updateNav');
 
     //user Routes 
     Route::get('/profile', [UserProfileController::class, 'showProfile'])->name('profile');
