@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
     // Home page method
-    public function home()
-    {
-        return view('job.index');
-    }
+    // public function home()
+    // {
+    //     return view('job.index');
+    // }
 
     // About page method
     public function about()
