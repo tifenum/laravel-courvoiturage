@@ -58,6 +58,7 @@
                 <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
                 <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link active">Réservation</a>
                 <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
+                <a href="{{ route('profile') }}"class="nav-item nav-link">Profile</a>
             @endif
             
             <!-- Links for AGENCE role -->

@@ -103,6 +103,7 @@
         <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
             <div id="tab-1" class="tab-pane fade show p-0 active">
                 @foreach($navettes as $navette)
+                @if(Auth::user()->id === $navette->creator)
                     <div class="job-item p-4 mb-4">
                         <div class="row g-4">
                             <div class="col-sm-12 col-md-8 d-flex align-items-center">
@@ -123,10 +124,11 @@
                                         <button type="submit" class="btn btn-danger">Supprimer</button>
                                     </form>
                                 </div>
-                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{ $navette->date_line }}</small>
+                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{ $navette->created_at}}</small>
                             </div>
                         </div>
                     </div>
+                @endif
                 @endforeach
             </div>
         </div>

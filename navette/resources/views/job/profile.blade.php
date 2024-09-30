@@ -45,11 +45,11 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
             <!-- Links for USER role -->
             @if(Auth::check() && Auth::user()->role === 'USER')
-                <a href="{{ route('home') }}" class="nav-item nav-link active">Accueil</a>
+                <a href="{{ route('home') }}" class="nav-item nav-link ">Accueil</a>
                 <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
                 <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link">Réservation</a>
                 <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
-                <a href="{{ route('profile') }}"class="nav-item nav-link ">Profile</a>
+                <a href="{{ route('profile') }}"class="nav-item nav-link active">Profile</a>
             @endif
 
             <!-- Links for ADMIN role -->
@@ -89,7 +89,7 @@
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="row gy-4">
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.1s">
+                            <div class="col-md-3 wow fadeIn" data-wow-delay="0.1s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
                                         <i class="fa fa-user text-primary"></i>
@@ -97,7 +97,7 @@
                                     <span>Name: {{ $user->name }}</span>
                                 </div>
                             </div>
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.3s">
+                            <div class="col-md-3 wow fadeIn" data-wow-delay="0.3s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
                                         <i class="fa fa-envelope-open text-primary"></i>
@@ -106,7 +106,7 @@
                                 </div>
                             </div>
                             @if(Auth::check() && Auth::user()->role !== 'AGENCE')
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+                            <div class="col-md-3 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
                                         <i class="fa fa-phone-alt text-primary"></i>
@@ -116,7 +116,7 @@
                             </div>
                             @endif
                             @if(Auth::check() && Auth::user()->role === 'AGENCE')
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+                            <div class="col-md-3 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
                                         <i class="fa fa-map-marker-alt text-primary"></i>
@@ -125,12 +125,23 @@
                                 </div>
                             </div>
                             @endif
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+                            <div class="col-md-3 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="d-flex align-items-center bg-light rounded p-4">
                                     <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
                                         <i class="fa fa-user-shield text-primary"></i>
                                     </div>
                                     <span>Role: {{ $user->role }}</span>
+                                </div>
+                            </div>
+                            @if(Auth::check() && Auth::user()->role === 'ADMIN')
+                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+                                <div class="d-flex align-items-center bg-light rounded p-4">
+                                    <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                        <i class="fa fa-user text-primary"></i>
+                                    </div>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
+                                    Créer Compte Agence 
+                                </button>
                                 </div>
                             </div>
                         </div>
@@ -141,17 +152,7 @@
         <!-- Profile End -->
          <!-- Create agence -->
 
- @if(Auth::check() && Auth::user()->role === 'ADMIN')
-<div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
-    <div class="d-flex align-items-center bg-light rounded p-4">
-        <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
-        <i class="fa fa-user text-primary"></i>
-        </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
-        Créer Compte Agence 
-        </button>
-    </div>
-</div>
+
 
         
 <div class="container-xxl py-5">
