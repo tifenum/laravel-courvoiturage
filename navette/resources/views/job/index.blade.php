@@ -60,6 +60,13 @@
                 <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link">Réservation</a>
                 <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
             @endif
+
+            <!-- Links for ADMIN role -->
+            @if(Auth::check() && Auth::user()->role === 'ADMIN')
+                <a href="{{ route('home') }}" class="nav-item nav-link active">Accueil</a>
+                <a href="{{ route('profile') }}"class="nav-item nav-link ">Profile</a>
+                <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
+            @endif
             
             <!-- Links for AGENCE role -->
             @if(Auth::check() && Auth::user()->role === 'AGENCE')

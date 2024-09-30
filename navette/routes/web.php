@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\NavetteController;
-
+use App\Http\Controllers\UserProfileController ;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,11 +43,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/reservation', [NavetteController::class, 'indexReservations'])->name('navettes.reservations');
     Route::get('/contact', [PageController::class, 'contact'])->name('contact');
     Route::get('/404', [PageController::class, 'error404'])->name('404');
-    
+    Route::get('/profile' , [PageController::class , 'profile'])->name('profile');
     // Agences routes
     Route::get('/create', [PageController::class, 'category'])->name('create_navette');
     Route::post('/create/navette', [NavetteController::class, 'store'])->name('creetenav');
     Route::get('/navettes', [NavetteController::class, 'index'])->name('navettes.index');
     Route::get('/navettes/{id}/edit', [NavetteController::class, 'edit'])->name('edit_navette');
     Route::delete('/navettes/{id}', [NavetteController::class, 'destroy'])->name('delete_navette');
+
+    //user Routes 
+    Route::get('/profile', [UserProfileController::class, 'showProfile'])->name('profile');
+    Route::get('/profile', [UserProfileController::class, 'showNavettes'])->name('profile');
 });

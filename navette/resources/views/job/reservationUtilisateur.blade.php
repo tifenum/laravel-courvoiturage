@@ -52,29 +52,32 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <!-- Accueil/Home -->
-            <a href="{{ route('home') }}" class="nav-item nav-link active">Accueil</a>
-            
-            <!-- About -->
-            <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
-            
-            <!-- Réservation -->
-            <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link">Réservation</a>
-            
-            <!-- Agences Dropdown -->
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Agences</a>
-                <div class="dropdown-menu rounded-0 m-0">
-                    <a href="{{ route('create_navette') }}" class="dropdown-item">Créer navette</a>
-                    <a href="{{ route('navettes.index') }}" class="dropdown-item">Gérer navette</a>
-                    <a href="{{ route('404') }}" class="dropdown-item">404</a>
-                </div>
-            </div>
-            
-            <!-- Contact -->
-            <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
-        </div>
+        @if(Auth::check() && Auth::user()->role === 'USER')
+                <a href="{{ route('home') }}" class="nav-item nav-link active">Accueil</a>
+                <a href="{{ route('about') }}" class="nav-item nav-link">About</a>
+                <a href="{{ route('navettes.reservations') }}" class="nav-item nav-link">Réservation</a>
+                <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
+                <a href="{{ route('profile') }}"class="nav-item nav-link ">Profile</a>
+            @endif
 
+            <!-- Links for ADMIN role -->
+            @if(Auth::check() && Auth::user()->role === 'ADMIN')
+                <a href="{{ route('home') }}" class="nav-item nav-link active">Accueil</a>
+                <a href="{{ route('profile') }}"class="nav-item nav-link ">Profile</a>
+                <a href="{{ route('contact') }}" class="nav-item nav-link">Contact</a>
+            @endif
+            
+            <!-- Links for AGENCE role -->
+            @if(Auth::check() && Auth::user()->role === 'AGENCE')
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Agences</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        <a href="{{ route('create_navette') }}" class="dropdown-item">Créer navette</a>
+                        <a href="{{ route('navettes.index') }}" class="dropdown-item">Gérer navette</a>
+                        <a href="{{ route('404') }}" class="dropdown-item">404</a>
+                    </div>
+                </div>
+            @endif
         <!-- Logout -->
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf

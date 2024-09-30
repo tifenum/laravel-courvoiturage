@@ -30,6 +30,10 @@ class PageController extends Controller
     {
         return view('job.contact');
     }
+    // public function profile()
+    // {
+    //     return view('job.profile');
+    // }
 
     // 404 page method
     public function error404()
