@@ -37,8 +37,8 @@ class NavetteController extends Controller
                 'price_per_person' => 'required|numeric|min:0',
                 'vehicle_price' => 'required|numeric|min:0',
                 'brand_price' => 'required|numeric|min:0',
-                'creator' => Auth::id(), // Get the authenticated user's ID
             ]);
+            $validatedData['creator'] = Auth::id(); // Get the authenticated user's ID
 
             // Create the navette record
             $navette = Navette::create($validatedData);
