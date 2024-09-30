@@ -74,7 +74,6 @@
                     <div class="signin-image">
                     <figure><img src="{{ asset('auth/images/signup-image.jpg') }}" alt="sign up image"></figure>
                     <a href="javascript:void(0);" class="signup-image-link" id="create-account-link" >Crér un compte</a>
-                    <a href="javascript:void(0);" class="signup-image-link" id="create-agence-link">Créer Compte Agence</a>
                     </div>
                     <div class="signin-form">
                         <h2 class="form-title">S'identifier</h2>

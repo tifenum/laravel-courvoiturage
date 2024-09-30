@@ -18,6 +18,7 @@ class CreateNavettesTable extends Migration // Change the class name here
             $table->decimal('price_per_person', 8, 2);
             $table->decimal('vehicle_price', 8, 2);
             $table->decimal('brand_price', 8, 2);
+            $table->boolean('accepted')->nullable(); // Add the new nullable boolean field
             $table->timestamps();
         });
     }

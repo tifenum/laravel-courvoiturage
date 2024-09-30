@@ -60,12 +60,13 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'place' => $request->lieu, // Using 'lieu' as the contact detail
+            'contactdetails' => $request->contactdetails,
             'role' => 'AGENCE', // Set the role as 'AGENCE'
             'password' => Hash::make($request->password),
         ]);
 
         // Redirect to the appropriate view (or handle registration logic)
-        return view('job.auth.auth');
+        return redirect()->back()->withInput();
     }
     
     // Login a user

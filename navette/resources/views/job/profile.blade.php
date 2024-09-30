@@ -209,40 +209,43 @@
 
 
 
-
 <!-- Contact Modal -->
 <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="contactModalLabel">Créer Compte Agence </h5>
+                <h5 class="modal-title" id="contactModalLabel">Créer Compte Agence</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Form inside modal -->
-                <form>
-                    <div class="mb-3">
-                        <label for="contactName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="contactName" value="{{ $user->name }}" readonly>
+                <form method="POST" action="{{ route('registerAgence') }}" class="register-form" id="register-form">
+                    @csrf
+                    <div class="form-group">
+                        <label for="name">Nom de l'agence</label>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Nom de l'agence" required />
                     </div>
-                    <div class="mb-3">
-                        <label for="contactEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="contactEmail" value="{{ $user->email }}" readonly>
+                    <div class="form-group">
+                        <label for="lieu">Lieu de l'agence</label>
+                        <input type="text" name="lieu" id="lieu" class="form-control" placeholder="Lieu de l'agence" required />
                     </div>
-                    <div class="mb-3">
-                        <label for="contactPhone" class="form-label">Lieu de l'agence</label>
-                        <input type="text" class="form-control" id="contactPhone" value="{{ $user->contactdetails }}" readonly>
+                    <div class="form-group">
+                        <label for="email">Adresse email</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Adresse email" required />
                     </div>
-                    <div class="mb-3">
-                        <label for="contactPhone" class="form-label">Mot de Passe</label>
-                        <input type="text" class="form-control" id="contactPhone" value="{{ $user->contactdetails }}" readonly>
+                    <div class="form-group">
+                        <label for="contact">contact details</label>
+                        <input type="text" name="contactdetails" id="contactdetails" class="form-control" placeholder="contact details" required />
                     </div>
-                    
+                    <div class="form-group">
+                        <label for="pass">Mot de passe</label>
+                        <input type="password" name="password" id="pass" class="form-control" placeholder="Password" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirmer le mot de passe</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Confirmer le mot de passe" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Créer agence</button>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Créer</button>
             </div>
         </div>
     </div>
@@ -262,6 +265,8 @@
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
