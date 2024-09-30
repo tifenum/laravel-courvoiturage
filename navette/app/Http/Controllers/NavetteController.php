@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth; // Ensure you include Auth
 use Illuminate\Support\Facades\Log;
 use App\Models\Navette;
 use Illuminate\Http\Request;
@@ -37,6 +37,7 @@ class NavetteController extends Controller
                 'price_per_person' => 'required|numeric|min:0',
                 'vehicle_price' => 'required|numeric|min:0',
                 'brand_price' => 'required|numeric|min:0',
+                'creator' => Auth::id(), // Get the authenticated user's ID
             ]);
 
             // Create the navette record
