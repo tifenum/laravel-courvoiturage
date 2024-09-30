@@ -220,28 +220,28 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('registerAgence') }}" class="register-form" id="register-form">
                     @csrf
-                    <div class="form-group">
-                        <label for="name">Nom de l'agence</label>
+                    <div class="form-group mb-3">
+                        
                         <input type="text" name="name" id="name" class="form-control" placeholder="Nom de l'agence" required />
                     </div>
-                    <div class="form-group">
-                        <label for="lieu">Lieu de l'agence</label>
+                    <div class="form-group mb-3">
+                        
                         <input type="text" name="lieu" id="lieu" class="form-control" placeholder="Lieu de l'agence" required />
                     </div>
-                    <div class="form-group">
-                        <label for="email">Adresse email</label>
+                    <div class="form-group mb-3">
+                        
                         <input type="email" name="email" id="email" class="form-control" placeholder="Adresse email" required />
                     </div>
-                    <div class="form-group">
-                        <label for="contact">contact details</label>
+                    <div class="form-group mb-3">
+                        
                         <input type="text" name="contactdetails" id="contactdetails" class="form-control" placeholder="contact details" required />
                     </div>
-                    <div class="form-group">
-                        <label for="pass">Mot de passe</label>
+                    <div class="form-group mb-3" >
+                
                         <input type="password" name="password" id="pass" class="form-control" placeholder="Password" required />
                     </div>
-                    <div class="form-group">
-                        <label for="password_confirmation">Confirmer le mot de passe</label>
+                    <div class="form-group mb-3">
+                        
                         <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Confirmer le mot de passe" required />
                     </div>
                     <button type="submit" class="btn btn-primary">Créer agence</button>

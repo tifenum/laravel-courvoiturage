@@ -134,32 +134,55 @@
 
 
         <!-- Search Start -->
-        <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
-            <div class="container">
+        <!-- <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
+    <div class="container">
+        <div class="row g-2">
+            <div class="col-md-10">
                 <div class="row g-2">
-                    <div class="col-md-10">
-                        <div class="row g-2">
-                            <div class="col-md-3">
-                                <input type="text" class="form-control border-0" placeholder="Lieu de Départ" />
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control border-0" placeholder="Lieu de D'arrivé" />
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control border-0" placeholder="Date" />
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control border-0" placeholder="Heure" />
-                            </div>
-                        </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control border-0" id="departureInput" placeholder="Lieu de Départ" />
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-dark border-0 w-100">Chercher</button>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control border-0" id="arrivalInput" placeholder="Lieu de D'arrivé" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control border-0" id="dateInput" placeholder="Date" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control border-0" id="timeInput" placeholder="Heure" />
                     </div>
                 </div>
             </div>
+            <div class="col-md-2">
+                <button class="btn btn-dark border-0 w-100" onclick="filterNavettes()">Chercher</button>
+            </div>
         </div>
+    </div>
+</div> -->
         <!-- Search End -->
+        <script>
+    function filterNavettes() {
+        const departureValue = document.getElementById("departureInput").value.toLowerCase();
+        const arrivalValue = document.getElementById("arrivalInput").value.toLowerCase();
+        const destinationValue = document.getElementById("destinationInput").value.toLowerCase();
+        const navetteItems = document.querySelectorAll(".navette-item");
+
+        navetteItems.forEach(item => {
+            const departure = item.getAttribute("data-departure");
+            const arrival = item.getAttribute("data-destination");
+            const destination = item.getAttribute("data-destination")
+            if (
+                (departure.includes(departureValue) || departureValue === "") &&
+                (arrival.includes(arrivalValue) || arrivalValue === "")&&
+                (destination.includes(destinationValue) || destinationValue === "")
+            ) {
+                item.style.display = ""; // Show the item
+            } else {
+                item.style.display = "none"; // Hide the item
+            }
+        });
+    }
+</script>
 
 
         <!-- Category Start -->
@@ -167,44 +190,59 @@
 
         <!-- Jobs Start -->
         <div class="container-xxl py-5">
-            <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Offres Spéciales</h1>
-                <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-                <div id="tab-1" class="tab-pane fade show p-0 active">
-                                @foreach($navettes as $navette)
-                                    <div class="job-item p-4 mb-4">
-                                        <div class="row g-4">
-                                            <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                                <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
-                                                <div class="text-start ps-4">
-                                                    <h5 class="mb-3">{{ $navette->destination }}</h5>
-                                                    <span class="text-truncate me-3">
-                                                        <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}
-                                                    </span>
-                                                    <span class="text-truncate me-3">
-                                                        <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
-                                                    </span>
-                                                    <span class="text-truncate me-0">
-                                                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                                <div class="d-flex mb-3">
-                                                    <a class="btn btn-primary" href="">Réserver</a>
-                                                </div>
-                                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                <!-- Uncomment below if you want a button to browse more jobs -->
-                                <!-- <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a> -->
-                            </div>
-                    
-                </div>
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Offres Spéciales</h1>
+
+        <!-- Search Inputs -->
+        <div class="row g-2 mb-4">
+
+        <div class="col-md-3">
+                <input type="text" class="form-control" id="destinationInput" placeholder="Destination" />
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="departureInput" placeholder="Lieu de Départ" />
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="arrivalInput" placeholder="Lieu de D'arrivé" />
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-success w-100" onclick="filterNavettes()">Chercher</button>
             </div>
         </div>
+
+        <div id="navettesContainer" class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                @foreach($navettes as $navette)
+                    <div class="job-item p-4 mb-4 navette-item" data-departure="{{ strtolower($navette->departure) }}" data-destination="{{ strtolower($navette->destination) }}">
+                        <div class="row g-4">
+                            <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                                <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
+                                <div class="text-start ps-4">
+                                    <h5 class="mb-3 navette-name">{{ $navette->destination }}</h5>
+                                    <span class="text-truncate me-3">
+                                        <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}
+                                    </span>
+                                    <span class="text-truncate me-3">
+                                        <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
+                                    </span>
+                                    <span class="text-truncate me-0">
+                                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                <div class="d-flex mb-3">
+                                    <a class="btn btn-primary" href="">Réserver</a>
+                                </div>
+                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045</small>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
         <!-- Jobs End -->
         <div class="container-xxl py-5">
         <div class="container">
