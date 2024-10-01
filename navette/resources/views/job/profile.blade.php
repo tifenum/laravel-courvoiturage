@@ -168,36 +168,47 @@
                                 @if ($navettes->isEmpty())
                                     <p>Aucune navette disponible pour le moment.</p>
                                 @else
-                                    @foreach($navettes as $navette)
-                                        <div class="job-item p-4 mb-4">
-                                            <div class="row g-4">
-                                                <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                                    <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
-                                                    <div class="text-start ps-4">
-                                                        <h5 class="mb-3">{{ $navette->destination }}</h5>
-                                                        <span class="text-truncate me-3">
-                                                            <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}
-                                                        </span>
-                                                        <span class="text-truncate me-3">
-                                                            <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
-                                                        </span>
-                                                        <span class="text-truncate me-0">
-                                                            <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                                    <div class="d-flex mb-3">
-                                                        <button class="btn btn-success me-2">Accepter</button>
-                                                        <button class="btn btn-danger">Rejeter</button>
-                                                    </div>
-                                                    <small class="text-truncate">
-                                                        <i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
+                                @foreach($navettes as $navette)
+    <div class="job-item p-4 mb-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
+                <div class="text-start ps-4">
+                    <h5 class="mb-3">{{ $navette->destination }}</h5>
+                    <span class="text-truncate me-3">
+                        <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}
+                    </span>
+                    <span class="text-truncate me-3">
+                        <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
+                    </span>
+                    <span class="text-truncate me-3">
+                        <i class="far fa-clock text-primary me-2"></i>{{ $navette->accepted }}
+                    </span>
+                    <span class="text-truncate me-0">
+                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
+                    </span>
+                    
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                <div class="d-flex mb-3">
+                    <form action="{{ route('navettes.accept', $navette->id) }}" method="POST" class="me-2">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Accepter</button>
+                    </form>
+                    <form action="{{ route('navettes.refuse', $navette->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Rejeter</button>
+                    </form>
+                </div>
+                <small class="text-truncate">
+                    <i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045
+                </small>
+            </div>
+        </div>
+    </div>
+@endforeach
+
                                 @endif
                             </div>
                         </div>

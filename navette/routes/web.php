@@ -7,6 +7,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\NavetteController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReservationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,6 +54,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/navettes/{id}/edit', [NavetteController::class, 'edit'])->name('edit_navette');
     Route::delete('/navettes/{id}', [NavetteController::class, 'destroy'])->name('delete_navette');
     Route::put('/navette/{id}', [NavetteController::class, 'update'])->name('updateNav');
+    Route::post('/creereservation/{id}', [ReservationController::class, 'store'])->name('creeteres');
+    Route::post('/navettes/{id}/accept', [NavetteController::class, 'accept'])->name('navettes.accept');
+    Route::post('/navettes/{id}/refuse', [NavetteController::class, 'refuse'])->name('navettes.refuse');
+    Route::post('/reservations/{id}/status/{status}', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
 
     //user Routes 
     Route::get('/profile', [UserProfileController::class, 'showProfile'])->name('profile');

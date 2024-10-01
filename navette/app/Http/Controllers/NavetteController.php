@@ -7,6 +7,7 @@ use App\Models\Navette;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Exception;
+use App\Models\Reservation; // Adjust the namespace as needed
 
 class NavetteController extends Controller
 {
@@ -16,11 +17,19 @@ class NavetteController extends Controller
         return view('job.testimonial', compact('navettes'));
     }
     
+
+    
     public function indexReservations()
     {
-        $navettes = Navette::all(); // Fetch all reservations (assuming Navette model holds reservation data)
-        return view('job.job-list', compact('navettes')); // Adjust the view name as needed
+        // Fetch reservations for the authenticated user and eager load the navette relationship
+        $reservations = Reservation::with('navette')->where('user_id', Auth::id())->get();
+    
+        // Pass only the reservations to the view
+        return view('job.job-list', compact('reservations')); // Adjust the view name as needed
     }
+    
+    
+
     public function store(Request $request)
     {
         try {
@@ -116,7 +125,24 @@ class NavetteController extends Controller
             ], 500);
         }
     }
+    public function accept($id)
+    {
+        $navette = Navette::findOrFail($id);
+        $navette->accepted = true; // Set accepted to true
+        $navette->save(); // Save the changes
     
+        return redirect()->back()->withInput();
+    }
+    
+    public function refuse($id)
+    {
+        $navette = Navette::findOrFail($id);
+        $navette->accepted = false; // Set accepted to false
+        $navette->save(); // Save the changes
+    
+        return redirect()->back()->withInput();
+    }
+        
 
 public function destroy($id)
 {

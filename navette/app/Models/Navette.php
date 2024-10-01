@@ -22,4 +22,10 @@ class Navette extends Model
         'creator',
         'accepted',
     ];
+    // Navette.php
+public function reservations()
+{
+    return $this->hasMany(Reservation::class, 'navette_id');
+}
+
 }

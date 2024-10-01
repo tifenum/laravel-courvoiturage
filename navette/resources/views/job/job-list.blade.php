@@ -108,33 +108,47 @@
                         
                         <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
                             <div id="tab-1" class="tab-pane fade show p-0 active">
-                                @foreach($navettes as $navette)
-                                    <div class="job-item p-4 mb-4">
-                                        <div class="row g-4">
-                                            <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                                <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
-                                                <div class="text-start ps-4">
-                                                    <h5 class="mb-3">{{ $navette->destination }}</h5>
-                                                    <span class="text-truncate me-3">
-                                                        <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}
-                                                    </span>
-                                                    <span class="text-truncate me-3">
-                                                        <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
-                                                    </span>
-                                                    <span class="text-truncate me-0">
-                                                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                                <div class="d-flex mb-3">
-                                                    <a class="btn btn-primary" href="">Réserver</a>
-                                                </div>
-                                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+
+                            @foreach($reservations as $reservation)
+    <div class="job-item p-4 mb-4 navette-item" 
+         data-departure="{{ strtolower(optional($reservation->navette)->departure ?? '') }}" 
+         data-arrival="{{ strtolower(optional($reservation->navette)->arrival ?? '') }}" 
+         data-destination="{{ strtolower(optional($reservation->navette)->destination ?? '') }}">
+        <div class="row g-4">
+            <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
+                <div class="text-start ps-4">
+                <h5 class="mb-3">{{ $reservation->status }}</h5>
+
+                    <h5 class="mb-3">{{ optional($reservation->navette)->destination ?? 'N/A' }}</h5>
+                    <span class="text-truncate me-3">
+                        <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ optional($reservation->navette)->departure ?? 'N/A' }}
+                    </span>
+                    <span class="text-truncate me-3">
+                        <i class="far fa-clock text-primary me-2"></i>{{ optional($reservation->navette)->arrival ?? 'N/A' }}
+                    </span>
+                    <span class="text-truncate me-0">
+                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ optional($reservation->navette)->price_per_person ?? 'N/A' }} - ${{ optional($reservation->navette)->vehicle_price ?? 'N/A' }}
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+            <div class="d-flex mb-3">
+                    <form action="{{ route('reservations.updateStatus', [$reservation->id, 'accepted']) }}" method="POST" class="me-2">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Accepter</button>
+                    </form>
+                    <form action="{{ route('reservations.updateStatus', [$reservation->id, 'refused']) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Rejeter</button>
+                    </form>
+                </div>
+                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date: {{ $reservation->created_at->format('d M, Y') }}</small>
+            </div>
+        </div>
+    </div>
+@endforeach
+
                                 <!-- Uncomment below if you want a button to browse more jobs -->
                                 <!-- <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a> -->
                             </div>

@@ -20,7 +20,6 @@ class CreateNavettesTable extends Migration // Change the class name here
             $table->decimal('vehicle_price', 8, 2);
             $table->decimal('brand_price', 8, 2);
             $table->boolean('accepted')->nullable()->default(null); // Add the new nullable boolean field with default null
-            // Foreign key constraint (optional, but recommended)
             $table->foreign('creator')->references('id')->on('users')->onDelete('cascade'); // Assuming users table has an id field
             $table->timestamps();
         });
