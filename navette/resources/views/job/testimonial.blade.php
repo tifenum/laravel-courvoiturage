@@ -99,7 +99,7 @@
         <!-- Jobs Start -->
         <div class="container-xxl py-5">
     <div class="container">
-        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Navettes proposer par X</h1>
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Navettes proposées par {{$user->name }}</h1>
         <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
             <div id="tab-1" class="tab-pane fade show p-0 active">
                 @foreach($navettes as $navette)
@@ -112,12 +112,30 @@
                                     <h5 class="mb-3">{{ $navette->destination }}</h5>
                                     <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}</span>
                                     <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}</span>
-                                    <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}</span>
-                                </div>
+                                    <span class="text-truncate me-0">
+    <i class="far fa-money-bill-alt text-primary me-2"></i>
+    @php
+        $pricePerPerson = ($navette->price_per_person ?? 0);
+        $vehiclePrice = ($navette->vehicle_price) ?? 0;
+        $brandPrice = ($navette->brand_price) ?? 0;
+
+        $totalPrice = $pricePerPerson * $vehiclePrice + $brandPrice;
+    @endphp
+    ${{ $totalPrice > 0 ? number_format($totalPrice, 2) : 'N/A' }} DT
+</span>                                    <span class="text-truncate me-0">
+                        @if($navette->accepted  === 1)
+                            <span style="color: green; margin-left:2rem;font-weight:bold">Accepted</span>
+                        @elseif($navette->accepted === 0)
+                            <span style="color: red; margin-left:2rem;font-weight:bold">Rejected</span>
+                        @else
+                            <span style="color: orange ;margin-left:2rem;font-weight:bold">Pending</span>
+                        @endif
+                    </span>
+                                </div> 
                             </div>
                             <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                 <div class="d-flex mb-3">
-                                <a class="btn btn-primary" href="#" onclick="openUpdateModal({{ $navette->id }}, '{{ $navette->destination }}', '{{ $navette->departure }}', '{{ $navette->arrival }}', '{{ $navette->vehicle_type }}', '{{ $navette->brand }}', '{{ $navette->price_per_person }}', '{{ $navette->vehicle_price }}', '{{ $navette->brand_price }}')">Modifier</a>
+                                <a class="btn btn-primary" href="#" onclick="openUpdateModal({{ $navette->id }}, '{{ $navette->destination }}', '{{ $navette->departure }}', '{{ $navette->arrival }}', '{{ $navette->vehicle_type }}', '{{ $navette->brand }}', '{{ $navette->price_per_person }}', '{{ $navette->vehicle_price }}', '{{ $navette->brand_price }}','{{ $navette->special }}')">Modifier</a>
                                 <form action="{{ route('delete_navette', $navette->id) }}" method="POST" style="margin-left: 1rem;">
                                         @csrf
                                         @method('DELETE')
@@ -165,13 +183,9 @@
                         <div class="col-12 col-sm-6">
                             <input type="text" id="update-vehicle-type" name="vehicle_type" class="form-control" placeholder="Type de véhicule" required>
                         </div>
+                       
                         <div class="col-12 col-sm-6">
-                            <select id="update-brand" name="brand" class="form-control" required>
-                                <option value="">Marque</option>
-                                <option value="100">Marque 1</option>
-                                <option value="150">Marque 2</option>
-                                <option value="200">Marque 3</option>
-                            </select>
+                            <input type="text" id="update-brand" name="brand" class="form-control" required>
                         </div>
                         <div class="col-12 col-sm-6">
                             <input type="number" id="update-price-per-person" name="price_per_person" class="form-control" placeholder="Prix par personne" required>
@@ -182,9 +196,9 @@
                         <div class="col-12 col-sm-6">
                             <input type="number" id="update-brand-price" name="brand_price" class="form-control" placeholder="Prix de la marque" required>
                         </div>
-                        <!-- <div class="col-12">
-                            <button type="button" class="btn btn-danger w-100" onclick="calculateTotalPrice()">Calculer tarif</button>
-                        </div> -->
+                        <div class="col-12 col-sm-6">
+                            <input type="number" id="update-special" name="special" class="form-control" placeholder="Offre special">
+                        </div>
                         <div class="col-12">
                             <button class="btn btn-primary w-100" type="submit">Mettre à jour</button>
                         </div>
@@ -264,7 +278,7 @@
         </div>
         <!-- Footer End -->
         <script>
-function openUpdateModal(id, destination, departure, arrival, vehicleType, brand, pricePerPerson, vehiclePrice, brandPrice) {
+function openUpdateModal(id, destination, departure, arrival, vehicleType, brand, pricePerPerson, vehiclePrice, brandPrice,special) {
     // Set the action attribute for the form
     document.getElementById('update-shuttle-form').action = document.getElementById('update-shuttle-form').action.replace(':id', id);
     
@@ -277,7 +291,7 @@ function openUpdateModal(id, destination, departure, arrival, vehicleType, brand
     document.getElementById('update-price-per-person').value = pricePerPerson;
     document.getElementById('update-vehicle-price').value = vehiclePrice;
     document.getElementById('update-brand-price').value = brandPrice;
-
+    document.getElementById('update-special').value = special || ''; 
     // Show the modal
     var modal = new bootstrap.Modal(document.getElementById('updateNavetteModal'));
     modal.show();

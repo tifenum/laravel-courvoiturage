@@ -100,7 +100,7 @@ class AuthController extends Controller
 
     if ($user && Auth::attempt(['email' => $email, 'password' => $password])) {
         // Log the successful login
-        return redirect()->intended('home');
+        return redirect()->intended('profile');
     } else {
         // Authentication failed
         return redirect('/');

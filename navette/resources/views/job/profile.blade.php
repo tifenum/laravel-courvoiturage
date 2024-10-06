@@ -169,6 +169,7 @@
                                     <p>Aucune navette disponible pour le moment.</p>
                                 @else
                                 @foreach($navettes as $navette)
+                                
     <div class="job-item p-4 mb-4">
         <div class="row g-4">
             <div class="col-sm-12 col-md-8 d-flex align-items-center">
@@ -181,24 +182,35 @@
                     <span class="text-truncate me-3">
                         <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
                     </span>
-                    <span class="text-truncate me-3">
-                        <i class="far fa-clock text-primary me-2"></i>{{ $navette->accepted }}
-                    </span>
+                    <!-- pending accepted or refused -->
+                   
                     <span class="text-truncate me-0">
                         <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
                     </span>
-                    
+                    <span class="text-truncate me-0">
+                        @if($navette->accepted  === 1)
+                            <span style="color: green;">Confirmed</span>
+                        @elseif($navette->accepted === 0)
+                            <span style="color: red;">Rejected</span>
+                        @else
+                            <span style="color: orange;">Pending</span>
+                        @endif
+                    </span>
                 </div>
             </div>
             <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                 <div class="d-flex mb-3">
                     <form action="{{ route('navettes.accept', $navette->id) }}" method="POST" class="me-2">
                         @csrf
+                        @if($navette->accepted  !== 1)
                         <button type="submit" class="btn btn-success">Accepter</button>
+                        @endif
                     </form>
                     <form action="{{ route('navettes.refuse', $navette->id) }}" method="POST">
                         @csrf
+                        @if($navette->accepted  !== 0)
                         <button type="submit" class="btn btn-danger">Rejeter</button>
+                        @endif
                     </form>
                 </div>
                 <small class="text-truncate">

@@ -117,13 +117,9 @@
         <div class="col-12 col-sm-6">
             <input type="text" id="vehicle-type" name="vehicle_type" class="form-control" placeholder="Type de véhicule" required>
         </div>
+        
         <div class="col-12 col-sm-6">
-            <select id="brand" name="brand" class="form-control" required>
-                <option value="">Marque</option>
-                <option value="100">Marque 1</option>
-                <option value="150">Marque 2</option>
-                <option value="200">Marque 3</option>
-            </select>
+            <input type="text" id="brand" name="brand" class="form-control" placeholder="Marque" required>
         </div>
         <div class="col-12 col-sm-6">
             <input type="number" id="price-per-person" name="price_per_person" class="form-control" placeholder="Prix par personne" required>
@@ -134,8 +130,11 @@
         <div class="col-12 col-sm-6">
             <input type="number" id="brand-price" name="brand_price" class="form-control" placeholder="Prix de la marque" required>
         </div>
+        <div class="col-12 col-sm-6">
+            <input type="number" id="special" name="special" class="form-control" placeholder="offre special">
+        </div>
         <div class="col-12">
-            <button type="button" class="btn btn-danger w-100" onclick="calculateTotalPrice()">Calculer tarif</button>
+            <button type="button" class="btn btn-danger w-100" onclick="calculatePrice()">Calculer tarif</button>
         </div>
         <div class="col-12">
             <button class="btn btn-primary w-100" type="submit">create</button>
@@ -148,18 +147,7 @@
 
                         </div>
                         
-                        <script>
-                        function calculateTotalPrice() {
-                            const pricePerPerson = parseFloat(document.getElementById('price-per-person').value) || 0;
-                            const vehiclePrice = parseFloat(document.getElementById('vehicle-price').value) || 0;
-                            const brandPrice = parseFloat(document.getElementById('brand').value) || 0;
                         
-                            const totalPrice = pricePerPerson + vehiclePrice + brandPrice;
-                        
-                            // Display the total price
-                            document.getElementById('total-price').textContent = `Tarif total: ${totalPrice.toFixed(2)} €`;
-                        }
-                        </script>
                         
                     </div>
         
@@ -259,7 +247,7 @@ async function calculateTotalPrice() {
     const pricePerPerson = parseFloat(document.getElementById('price-per-person').value) || 0;
     const vehiclePrice = parseFloat(document.getElementById('vehicle-price').value) || 0;
     const brandPrice = parseFloat(document.getElementById('brand-price').value) || 0;
-
+    const special = parseFloat(document.getElementById('special').value) || 0;
     const data = {
         destination,
         departure,
@@ -268,7 +256,8 @@ async function calculateTotalPrice() {
         brand,
         price_per_person: pricePerPerson,
         vehicle_price: vehiclePrice,
-        brand_price: brandPrice
+        brand_price: brandPrice,
+        special:special
     };
     console.log(data);
     const response = await fetch('/create/navette', {
@@ -280,10 +269,23 @@ async function calculateTotalPrice() {
     });
 
     const result = await response.json();
-    document.getElementById('total-price').textContent = `Tarif total: ${result.total_price.toFixed(2)} €`;
+    document.getElementById('total-price').textContent = `Tarif total: ${result.total_price.toFixed(2)}`;
 }
 </script>
 
+
+<script>
+    function calculatePrice() {
+        const pricePerPerson = parseFloat(document.getElementById('price-per-person').value) || 0;
+        const vehiclePrice = parseFloat(document.getElementById('vehicle-price').value) || 0;
+        const brandPrice = parseFloat(document.getElementById('brand-price').value) || 0;
+        const special = parseFloat(document.getElementById('special').value) || 0;
+        const totalPrice = pricePerPerson * vehiclePrice + brandPrice - (pricePerPerson * vehiclePrice + brandPrice)*special/100;
+
+        // Display the total price
+        document.getElementById('total-price').textContent = `Tarif total: ${totalPrice.toFixed(2)} €`;
+    }
+</script>
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>

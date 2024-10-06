@@ -98,7 +98,7 @@
 
 
         <!-- Jobs Start -->
-        <div class="container-xxl py-5">
+                            <div class="container-xxl py-5">
             <div class="container">
                 <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Tous les navettes réserver</h1>
                 <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
@@ -118,7 +118,8 @@
             <div class="col-sm-12 col-md-8 d-flex align-items-center">
                 <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
                 <div class="text-start ps-4">
-                <h5 class="mb-3">{{ $reservation->status }}</h5>
+                    <!-- Confirmer ou annuler -->
+                
 
                     <h5 class="mb-3">{{ optional($reservation->navette)->destination ?? 'N/A' }}</h5>
                     <span class="text-truncate me-3">
@@ -128,19 +129,42 @@
                         <i class="far fa-clock text-primary me-2"></i>{{ optional($reservation->navette)->arrival ?? 'N/A' }}
                     </span>
                     <span class="text-truncate me-0">
-                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ optional($reservation->navette)->price_per_person ?? 'N/A' }} - ${{ optional($reservation->navette)->vehicle_price ?? 'N/A' }}
+    <i class="far fa-money-bill-alt text-primary me-2"></i>
+    @php
+        $pricePerPerson = optional($reservation->navette)->price_per_person ?? 0;
+        $vehiclePrice = optional($reservation->navette)->vehicle_price ?? 0;
+        $brandPrice = optional($reservation->navette)->brand_price ?? 0;
+
+        $totalPrice = $pricePerPerson * $vehiclePrice + $brandPrice;
+    @endphp
+    ${{ $totalPrice > 0 ? number_format($totalPrice, 2) : 'N/A' }} DT
+</span>
+
+                    <span class="text-truncate me-0">
+                        @if($reservation->status === 1)
+                            <span style="color: green; margin-left:2rem;font-weight:bold">Confirmed</span>
+                        @elseif($reservation->status === 0)
+                            <span style="color: red; margin-left:2rem;font-weight:bold">Annuler</span>
+                        @else
+                            <span style="color: orange; margin-left:2rem;font-weight:bold">Pending</span>
+                        @endif
                     </span>
+
                 </div>
             </div>
             <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
             <div class="d-flex mb-3">
                     <form action="{{ route('reservations.updateStatus', [$reservation->id, 'accepted']) }}" method="POST" class="me-2">
                         @csrf
-                        <button type="submit" class="btn btn-success">Accepter</button>
+                        @if($reservation->status !== 1)
+                        <button type="submit" class="btn btn-success">Confirmer</button>
+                        @endif
                     </form>
                     <form action="{{ route('reservations.updateStatus', [$reservation->id, 'refused']) }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn btn-danger">Rejeter</button>
+                        @if($reservation->status !== 0)
+                        <button type="submit" class="btn btn-danger">Annuler</button>
+                        @endif
                     </form>
                 </div>
                 <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date: {{ $reservation->created_at->format('d M, Y') }}</small>

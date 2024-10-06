@@ -21,6 +21,7 @@ class Navette extends Model
         'brand_price',
         'creator',
         'accepted',
+        'special'
     ];
     // Navette.php
 public function reservations()

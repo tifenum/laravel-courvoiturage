@@ -13,8 +13,9 @@ class NavetteController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $navettes = Navette::all();
-        return view('job.testimonial', compact('navettes'));
+        return view('job.testimonial', compact('navettes' , 'user'));
     }
     
 
@@ -46,6 +47,7 @@ class NavetteController extends Controller
                 'price_per_person' => 'required|numeric|min:0',
                 'vehicle_price' => 'required|numeric|min:0',
                 'brand_price' => 'required|numeric|min:0',
+                'special' => 'nullable|numeric|min:0',
             ]);
             $validatedData['creator'] = Auth::id(); // Get the authenticated user's ID
 
@@ -94,6 +96,7 @@ class NavetteController extends Controller
                 'price_per_person' => 'required|numeric|min:0',
                 'vehicle_price' => 'required|numeric|min:0',
                 'brand_price' => 'required|numeric|min:0',
+                'special' => 'nullable|numeric|min:0',
             ]);
     
             // Find the navette by ID

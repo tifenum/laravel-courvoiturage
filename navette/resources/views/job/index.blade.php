@@ -166,7 +166,7 @@
         <!-- Jobs Start -->
 <div class="container-xxl py-5">
     <div class="container">
-        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Offres Spéciales</h1>
+        
 
         <!-- Search Inputs -->
         <div class="row g-2 mb-4">
@@ -184,10 +184,11 @@
                 <button class="btn btn-success w-100" onclick="filterNavettes()">Chercher</button>
             </div>
         </div>
-
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Offres Spéciales</h1>
         <div id="navettesContainer" class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
             <div id="tab-1" class="tab-pane fade show p-0 active">
                 @foreach($navettes as $navette)
+                @if($navette->accepted === 1 && $navette->special !== NULL)
                     <div class="job-item p-4 mb-4 navette-item" data-departure="{{ strtolower($navette->departure) }}" data-destination="{{ strtolower($navette->destination) }}">
                         <div class="row g-4">
                             <div class="col-sm-12 col-md-8 d-flex align-items-center">
@@ -201,18 +202,38 @@
                                         <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
                                     </span>
                                     <span class="text-truncate me-0">
-                                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
-                                    </span>
+    <i class="far fa-money-bill-alt text-primary me-2"></i>
+    @php
+        $pricePerPerson = ($navette->price_per_person ?? 0);
+        $vehiclePrice = ($navette->vehicle_price) ?? 0;
+        $brandPrice = ($navette->brand_price) ?? 0;
+        $special = ($navette->special) ?? 0;
+        
+        // Calculate the total price without the special offer
+        $totalPriceWithoutSpecial = $pricePerPerson * $vehiclePrice + $brandPrice;
+        
+        // Calculate the total price with the special offer
+        $totalPriceWithSpecial = $totalPriceWithoutSpecial - ($totalPriceWithoutSpecial * $special / 100);
+    @endphp
+
+    <!-- Display the total price without the special offer with a strike-through -->
+    <s text-danger me-2>{{ $totalPriceWithoutSpecial > 0 ? number_format($totalPriceWithoutSpecial, 2) : 'N/A' }} DT</s>
+
+    <!-- Display the total price with the special offer next to it -->
+    <span class="ms-2 text-primary me-2">{{ $totalPriceWithSpecial > 0 ? number_format($totalPriceWithSpecial, 2) : 'N/A' }} DT</span>
+</span>
+         
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                 <div class="d-flex mb-3">
                                 <a class="btn btn-primary" href="javascript:void(0);" onclick="reserveNavette({{ $navette->id }})">Réserver</a>
                                 </div>
-                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045</small>
+                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>{{ $navette->created_at }}</small>
                             </div>
                         </div>
                     </div>
+                    @endif
                 @endforeach
             </div>
         </div>
@@ -223,43 +244,54 @@
 <div class="container-xxl py-5">
 <div class="container">
 <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Tous les navettes</h1>
-            <div id="tab-1" class="tab-pane fade show p-0 active">
-            @foreach($navettes as $navette)
-    <div class="job-item p-4 mb-4 navette-item" 
-         data-departure="{{ strtolower($navette->departure) }}" 
-         data-arrival="{{ strtolower($navette->arrival) }}" 
-         data-destination="{{ strtolower($navette->destination) }}">
-        <div class="row g-4">
-            <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
-                <div class="text-start ps-4">
-                    <h5 class="mb-3">{{ $navette->destination }}</h5>
-                    <span class="text-truncate me-3">
-                        <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}
-                    </span>
-                    <span class="text-truncate me-3">
-                        <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
-                    </span>
-                    <span class="text-truncate me-0">
-                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
-                    </span>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                <div class="d-flex mb-3">
-                    <a class="btn btn-primary" href="javascript:void(0);" onclick="reserveNavette({{ $navette->id }})">Réserver</a>
-                </div>
-                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: 01 Jan, 2045</small>
-            </div>
-        </div>
-    </div>
-@endforeach
+    <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Tous les navettes</h1>
+    <div id="tab-1" class="tab-pane fade show p-0 active">
+        @foreach($navettes as $navette)
+            @if($navette->accepted === 1 && $navette->special === NULL)
+            <div class="job-item p-4 mb-4 navette-item" 
+                data-departure="{{ strtolower($navette->departure) }}" 
+                data-arrival="{{ strtolower($navette->arrival) }}" 
+                data-destination="{{ strtolower($navette->destination) }}">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                        <img class="flex-shrink-0 img-fluid border rounded" src="img/com-logo-{{ $loop->index + 1 }}.jpg" alt="" style="width: 80px; height: 80px;">
+                        <div class="text-start ps-4">
+                            <h5 class="mb-3">{{ $navette->destination }}</h5>
+                            <span class="text-truncate me-3">
+                                <i class="fa fa-map-marker-alt text-primary me-2"></i>{{ $navette->departure }}
+                            </span>
+                            <span class="text-truncate me-3">
+                                <i class="far fa-clock text-primary me-2"></i>{{ $navette->arrival }}
+                            </span>
+                            <span class="text-truncate me-0">
+    <i class="far fa-money-bill-alt text-primary me-2"></i>
+    @php
+        $pricePerPerson = ($navette->price_per_person ?? 0);
+        $vehiclePrice = ($navette->vehicle_price) ?? 0;
+        $brandPrice = ($navette->brand_price) ?? 0;
 
-                <!-- Uncomment below if you want a button to browse more jobs -->
-                <!-- <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a> -->
+        $totalPrice = $pricePerPerson * $vehiclePrice + $brandPrice;
+    @endphp
+    ${{ $totalPrice > 0 ? number_format($totalPrice, 2) : 'N/A' }} DT
+</span>          
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                        <div class="d-flex mb-3">
+                            <a class="btn btn-primary" href="javascript:void(0);" onclick="reserveNavette({{ $navette->id }})">Réserver</a>
+                        </div>
+                        <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>{{ $navette->created_at }}</small>
+                    </div>
+                </div>
             </div>
-        </div>
+            @endif
+        @endforeach
+
+        <!-- Uncomment below if you want a button to browse more jobs -->
+        <!-- <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a> -->
+    </div>
+</div>
+
         
 
         <!-- Testimonial Start -->
