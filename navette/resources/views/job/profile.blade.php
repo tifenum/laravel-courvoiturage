@@ -185,8 +185,16 @@
                     <!-- pending accepted or refused -->
                    
                     <span class="text-truncate me-0">
-                        <i class="far fa-money-bill-alt text-primary me-2"></i>${{ $navette->price_per_person }} - ${{ $navette->vehicle_price }}
-                    </span>
+    <i class="far fa-money-bill-alt text-primary me-2"></i>
+    @php
+        $pricePerPerson = ($navette->price_per_person ?? 0);
+        $vehiclePrice = ($navette->vehicle_price) ?? 0;
+        $brandPrice = ($navette->brand_price) ?? 0;
+
+        $totalPrice = $pricePerPerson * $vehiclePrice + $brandPrice;
+    @endphp
+    ${{ $totalPrice > 0 ? number_format($totalPrice, 2) : 'N/A' }} DT
+</span>
                     <span class="text-truncate me-0">
                         @if($navette->accepted  === 1)
                             <span style="color: green;">Confirmed</span>

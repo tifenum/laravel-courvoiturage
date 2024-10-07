@@ -16,10 +16,11 @@ class CreateReservationsTable extends Migration
             $table->unsignedBigInteger('user_id'); // Foreign key for the user
             $table->unsignedBigInteger('navette_id'); // Foreign key for the navette
             $table->boolean('status')->nullable()->default(null); // Nullable boolean field with default null
-
+            
             // Foreign key constraints
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('navette_id')->references('id')->on('navettes')->onDelete('cascade');
+            $table->decimal('total_price', 8, 2); // Add the total_price field
 
             $table->timestamps();
         });

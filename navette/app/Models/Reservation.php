@@ -13,6 +13,7 @@ class Reservation extends Model
         'user_id',
         'navette_id',
         'status',
+        'total_price'
     ];
 
     // Reservation.php
